@@ -64,33 +64,41 @@ class Crawler(object):
                     self.driver.set_page_load_timeout(cm.SOFT_VISIT_TIMEOUT)
                 except WebDriverException as seto_exc:
                     wl_log.error("Setting soft timeout %s", seto_exc)
-                self._do_visit()
+                if self._do_visit() is True:
+                    self.controller.restart_tor()
             sleep(float(self.job.config['pause_between_loads']))
             self.post_visit()
 
     def _do_visit(self): #sniffer로만 사용.
         with Sniffer(path=self.job.pcap_file, filter=cm.DEFAULT_FILTER,
-                     device=self.device, dumpcap_log=self.job.pcap_log):
+                    device=self.device, dumpcap_log=self.job.pcap_log):
             sleep(1)  # make sure dumpcap is running
-            try:
-                screenshot_count = 0
-                with ut.timeout(cm.HARD_VISIT_TIMEOUT):
-                    # begin loading page
-                    self.driver.get(self.job.url)
-                    sleep(1)  # sleep to catch some lingering AJAX-type traffic
-
-                    # take first screenshot
-                    if self.screenshots:
-                        try:
-                            self.driver.get_screenshot_as_file(self.job.png_file(screenshot_count))
-                            screenshot_count += 1
-                        except WebDriverException:
-                            wl_log.error("Cannot get screenshot.")
-
-            except (cm.HardTimeoutException, TimeoutException):
-                wl_log.error("Visit to %s reached hard timeout!", self.job.url)
-            except Exception as exc:
-                wl_log.error("Unknown exception: %s", exc)
+           
+            isCaptcha = True
+            if not isCaptcha:
+                try:
+                    screenshot_count = 0
+                    with ut.timeout(cm.HARD_VISIT_TIMEOUT):
+                        # begin loading page
+                        self.driver.get(self.job.url)
+                        sleep(1)  # sleep to catch some lingering AJAX-type traffic
+                       
+                        # take first screenshot
+                        if self.screenshots:
+                            try:
+                                self.driver.get_screenshot_as_file(self.job.png_file(screenshot_count))
+                                screenshot_count += 1
+                            except WebDriverException:
+                                wl_log.error("Cannot get screenshot.")
+                               
+                except (cm.HardTimeoutException, TimeoutException):
+                    wl_log.error("Visit to %s reached hard timeout!", self.job.url)
+                except Exception as exc:
+                    wl_log.error("Unknown exception: %s", exc)
+            else:
+                isCaptcha = True
+                wl_log.error("CAPTCHA!")
+        return isCaptcha
 
 
 class CrawlJob(object):
