@@ -72,25 +72,41 @@ class Crawler(object):
         with Sniffer(path=self.job.pcap_file, filter=cm.DEFAULT_FILTER,
                      device=self.device, dumpcap_log=self.job.pcap_log):
             sleep(1)  # make sure dumpcap is running
-            try:
-                screenshot_count = 0
-                with ut.timeout(cm.HARD_VISIT_TIMEOUT):
-                    # begin loading page
-                    self.driver.get(self.job.url)
-                    sleep(1)  # sleep to catch some lingering AJAX-type traffic
 
-                    # take first screenshot
-                    if self.screenshots:
-                        try:
-                            self.driver.get_screenshot_as_file(self.job.png_file(screenshot_count))
-                            screenshot_count += 1
-                        except WebDriverException:
-                            wl_log.error("Cannot get screenshot.")
+            #사이즈 측정하는 함수 명을 _filesize_cal(self), 해당 함수의 리턴 값을 boolean 타입의 isCapcha -> 변경 가능
+            isCaptcha = True
+            isExeption = False
+            if not isCaptcha:
+                try:
+                    screenshot_count = 0
+                    with ut.timeout(cm.HARD_VISIT_TIMEOUT):
+                        # begin loading page
+                        self.driver.get(self.job.url)
+                        sleep(1)  # sleep to catch some lingering AJAX-type traffic
 
-            except (cm.HardTimeoutException, TimeoutException):
-                wl_log.error("Visit to %s reached hard timeout!", self.job.url)
-            except Exception as exc:
-                wl_log.error("Unknown exception: %s", exc)
+                        # take first screenshot
+                        if self.screenshots:
+                            try:
+                                self.driver.get_screenshot_as_file(self.job.png_file(screenshot_count))
+                                screenshot_count += 1
+                            except WebDriverException:
+                                isExeption = True
+                                wl_log.error("Cannot get screenshot.")
+
+                #question. 여기서는 timeoutexception을 timeout으로 처리하고 captcha로 처리하지 않았는데 교수님 코드는 catcha로 인식. y?
+                except (cm.HardTimeoutException, TimeoutException):
+                    isExeption = True
+                    wl_log.error("Visit to %s reached hard timeout!", self.job.url)
+
+                except Exception as exc:
+                    isExeption = True
+                    wl_log.error("Unknown exception: %s", exc)
+
+            else:
+                isExeption = True
+                wl_log.error("CAPTCHA!")
+        return isExeption
+
 
 
 class CrawlJob(object):
