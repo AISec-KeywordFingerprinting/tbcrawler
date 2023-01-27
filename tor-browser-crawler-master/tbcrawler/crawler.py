@@ -68,7 +68,7 @@ class Crawler(object):
             sleep(float(self.job.config['pause_between_loads']))
             self.post_visit()
 
-    def _do_visit(self): #sniffer로만 사용.
+    def _do_visit(self):
         with Sniffer(path=self.job.pcap_file, filter=cm.DEFAULT_FILTER,
                      device=self.device, dumpcap_log=self.job.pcap_log):
             sleep(1)  # make sure dumpcap is running

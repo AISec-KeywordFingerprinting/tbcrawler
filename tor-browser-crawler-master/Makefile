@@ -25,7 +25,7 @@ VOLUMES = \
 
 
 # network interface on which to listen
-DEVICE=eno1 #디바이스 넘버가 하드코드되어잇어서 내 디바이스 이름으로 수정해주어야 합니데이`
+DEVICE=eno1
 
 # commandline arguments
 CRAWL_PARAMS=-c wang_and_goldberg -u ./sites.txt --timeout 2 -s -d ${DEVICE} -v
