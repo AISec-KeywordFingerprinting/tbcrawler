@@ -27,6 +27,7 @@ class Crawler(object):
         wl_log.info(pformat(self.job))
         for self.job.batch in range(self.job.batches):
             wl_log.info("**** Starting batch %s ***" % self.job.batch)
+            self.controller.restart_tor()
             self._do_batch()
             sleep(float(self.job.config['pause_between_batches']))
 
@@ -46,34 +47,43 @@ class Crawler(object):
         If the controller is configured to not pollute the profile, each
         restart forces to switch the entry guard.
         """
-        with self.controller.launch():
-            for self.job.site in range(len(self.job.urls)):
-                if len(self.job.url) > cm.MAX_FNAME_LENGTH:
-                    wl_log.warning("URL is too long: %s" % self.job.url)
-                    continue
-                self._do_instance()
-                sleep(float(self.job.config['pause_between_videos']))
+        self.controller.restart_tor()
+        for self.job.site in range(len(self.job.urls)):
+            if len(self.job.url) > cm.MAX_FNAME_LENGTH:
+                wl_log.warning("URL is too long: %s" % self.job.url)
+                continue
+            self._do_instance()
+            sleep(float(self.job.config['pause_between_videos']))
 
     def _do_instance(self):
         for self.job.visit in range(self.job.visits):
             ut.create_dir(self.job.path)
-            wl_log.info("*** Visit #%s to %s ***", self.job.visit, self.job.url)
+            wl_log.info("*** 사이트를 방문 중입니다!! Visit #%s to %s ***", self.job.visit, self.job.url)
             #self.job.screen_num = 0
             with self.driver.launch():
                 try:
                     self.driver.set_page_load_timeout(cm.SOFT_VISIT_TIMEOUT)
                 except WebDriverException as seto_exc:
                     wl_log.error("Setting soft timeout %s", seto_exc)
-                if self._do_visit() is True:
-                    self.controller.restart_tor()
+            self._do_restart()    
             sleep(float(self.job.config['pause_between_loads']))
             self.post_visit()
-
-    def _do_visit(self): #sniffer로만 사용.
+    
+    ##################################################################################
+    #만약 캡챠가 맞다면, Tor 경로 새롭게 설정 후 다시 방문하는 함수
+    def _do_restart(self):
+        if self._do_visit() is True: 
+            wl_log.warning("Crawler에서 토르 프로세스 재시작 중")
+            self.controller.restart_tor()
+            wl_log.warning("Crawler에서 토르 프로세스 재시작 완료")
+            self._do_restart()
+    ##################################################################################
+            
+    def _do_visit(self):
         with Sniffer(path=self.job.pcap_file, filter=cm.DEFAULT_FILTER,
-                    device=self.device, dumpcap_log=self.job.pcap_log):
+                     device=self.device, dumpcap_log=self.job.pcap_log):
             sleep(1)  # make sure dumpcap is running
-           
+            
             isCaptcha = True
             if not isCaptcha:
                 try:
@@ -82,7 +92,7 @@ class Crawler(object):
                         # begin loading page
                         self.driver.get(self.job.url)
                         sleep(1)  # sleep to catch some lingering AJAX-type traffic
-                       
+                        
                         # take first screenshot
                         if self.screenshots:
                             try:
@@ -90,7 +100,7 @@ class Crawler(object):
                                 screenshot_count += 1
                             except WebDriverException:
                                 wl_log.error("Cannot get screenshot.")
-                               
+                                
                 except (cm.HardTimeoutException, TimeoutException):
                     wl_log.error("Visit to %s reached hard timeout!", self.job.url)
                 except Exception as exc:
@@ -99,8 +109,8 @@ class Crawler(object):
                 isCaptcha = True
                 wl_log.error("CAPTCHA!")
         return isCaptcha
-
-
+	        
+	        
 class CrawlJob(object):
     def __init__(self, config, urls):
         self.urls = urls
@@ -140,5 +150,3 @@ class CrawlJob(object):
     def __repr__(self):
         return "Batches: %s, Sites: %s, Visits: %s" \
                % (self.batches, len(self.urls), self.visits)
-
-
