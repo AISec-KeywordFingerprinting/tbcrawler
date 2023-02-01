@@ -14,6 +14,10 @@ from tbcrawler.log import wl_log
 import random
 from selenium.webdriver.common.keys import Keys
 
+#added action chains for clicking element
+from bs4 import BeautifulSoup
+from selenium.webdriver.common.action_chains import ActionChains
+
 class Crawler(object):
     def __init__(self, driver, controller, screenshots=True, device="eth0"):
         self.driver = driver
@@ -82,8 +86,10 @@ class Crawler(object):
                     # begin loading page
                     #self.driver.get(self.job.url)
                     ###############################################################################
+                    # type keyword character by character
                     page = self.driver.get('http://www.google.com')
-                    sleep(1)  # sleep to catch some lingering AJAX-type traffic
+                    self.driver.implicitly_wait(1)
+                    #sleep(1)  # sleep to catch some lingering AJAX-type traffic
                     try:
                         search = self.driver.find_element(By.NAME, 'q')
                         search.click()
@@ -92,7 +98,8 @@ class Crawler(object):
                         a ='apple'
                         for c in list(a):
                             search.send_keys(c)
-                            time.sleep(random.uniform(0.1, 0.7))
+                            #time.sleep(random.uniform(0.1, 0.7))
+                            self.driver.implicitly_wait(random.uniform(0.1, 0.7))
                         search.send_keys(Keys.RETURN)
                     except (ElementNotVisibleException, NoSuchElementException,TimeoutException):
                         result = "CAPTCHA"
@@ -101,13 +108,24 @@ class Crawler(object):
                     # take first screenshot
                     if self.screenshots:
                         try:
-                            #self.driver.get_screenshot_as_file(self.job.png_file(screenshot_count))
-                            self.driver.get_screenshot_as_file()
+                            self.driver.get_screenshot_as_file(self.job.png_file(screenshot_count))
                             screenshot_count += 1
                         except WebDriverException:
                             wl_log.error("Cannot get screenshot.")
-                    else :
-                        wl_log.error("No screenshot.")
+
+                    ###################################################################################################################
+                    #check html file size
+                    html_source = self.driver.page_source
+                    html_source = html_source.encode('utf-8').decode('ascii', 'ignore')
+                    soup = BeautifulSoup(html_source, "lxml")
+
+                    with open(self.job.path + "htmlfile.txt", 'w') as f_html:
+                        f_html.write(soup.prettify())
+                    b = os.path.getsize(self.job.path + "htmlfile.txt")
+                    print("out_png size->" + b)
+                    if b<=10000: # smaller than 10kb
+                        print("CAPTCHA!")
+                    ###########################################################################################
 
             except (cm.HardTimeoutException, TimeoutException):
                 wl_log.error("Visit to %s reached hard timeout!", self.job.url)
@@ -149,8 +167,7 @@ class CrawlJob(object):
         return join(cm.CRAWL_DIR, "_".join(map(str, attributes)))
 
     def png_file(self, time):
-        #return join(self.path, "screenshot_{}.png".format(time))
-        return join(self.path, ".screenshot.png")
+        return join(self.path, "screenshot_{}.png".format(time))
 
     def __repr__(self):
         return "Batches: %s, Sites: %s, Visits: %s" \
