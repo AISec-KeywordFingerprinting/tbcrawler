@@ -11,6 +11,7 @@ from tbselenium.common import DEFAULT_TOR_DATA_PATH, DEFAULT_TOR_BINARY_PATH
 
 import tbcrawler.common as cm
 import tbcrawler.utils as ut
+from time import sleep, time
 
 
 class TorController(object):
@@ -74,7 +75,9 @@ class TorController(object):
         if self.tor_process:
             wl_log.warning("TorController에서 프로세스 킬링 중... %s, 컨트롤 포트 %s, 소캣 포트 %s", self.tor_process, self.control_port, self.socks_port)
             print("Killing tor process")
-            if self.tor_process.kill() is 0:
+            self.tor_process.kill()
+            self.tor_process.wait()
+            if self.tor_process.returncode is not None:
                 wl_log.warning("TorController에서 프로세스 킬링 완료... %s, 컨트롤 포트 %s, 소캣 포트 %s", self.tor_process, self.control_port, self.socks_port)
             else:
                 wl_log.warning("TorController에서 프로세스 킬링 실패... %s, 컨트롤 포트 %s, 소캣 포트 %s", self.tor_process, self.control_port, self.socks_port)
@@ -90,7 +93,6 @@ class TorController(object):
 
         print(("Tor config: %s" % self.torrc_dict))
         # the following may raise, make sure it's handled
-        # 문제가 생기는 부분 > 토르 restart 부분
         self.tor_process = stem.process.launch_tor_with_config(
             config=self.torrc_dict,
             init_msg_handler=self.tor_log_handler,

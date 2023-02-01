@@ -27,6 +27,7 @@ class Crawler(object):
         wl_log.info(pformat(self.job))
         for self.job.batch in range(self.job.batches):
             wl_log.info("**** Starting batch %s ***" % self.job.batch)
+            self.controller.restart_tor()
             self._do_batch()
             sleep(float(self.job.config['pause_between_batches']))
 
@@ -41,12 +42,12 @@ class Crawler(object):
             wl_log.error("Check pcap: %s", self.job.pcap_file)
 
     def _do_batch(self):
+        wl_log.info("*** do batch 실행 중 ***")
         """
         Must init/restart the Tor process to have a different circuit.
         If the controller is configured to not pollute the profile, each
         restart forces to switch the entry guard.
         """
-        self.controller.restart_tor()
         for self.job.site in range(len(self.job.urls)):
             if len(self.job.url) > cm.MAX_FNAME_LENGTH:
                 wl_log.warning("URL is too long: %s" % self.job.url)
