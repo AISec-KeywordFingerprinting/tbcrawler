@@ -27,7 +27,6 @@ class Crawler(object):
         wl_log.info(pformat(self.job))
         for self.job.batch in range(self.job.batches):
             wl_log.info("**** Starting batch %s ***" % self.job.batch)
-            self.controller.restart_tor()
             self._do_batch()
             sleep(float(self.job.config['pause_between_batches']))
 
