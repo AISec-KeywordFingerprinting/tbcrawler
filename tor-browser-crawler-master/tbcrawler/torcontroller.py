@@ -2,6 +2,7 @@ import shutil
 from contextlib import contextmanager
 from os import environ
 from os.path import join, isfile, isdir, dirname
+from tbcrawler.log import wl_log
 
 import stem.process
 from stem.control import Controller
@@ -60,7 +61,9 @@ class TorController(object):
     def restart_tor(self):
         """Kill current Tor process and run a new one."""
         self.quit()
+        wl_log.warning("TorController에서 토르 프로세스 재시작 중")
         self.launch_tor_service()
+        wl_log.warning("TorController에서 토르 프로세스 재시작 완료")
 
     def export_lib_path(self):
         """Add the Tor Browser binary to the library path."""
@@ -69,8 +72,12 @@ class TorController(object):
     def quit(self):
         """Kill Tor process."""
         if self.tor_process:
+            wl_log.warning("TorController에서 프로세스 킬링 중... %s, 컨트롤 포트 %s, 소캣 포트 %s", self.tor_process, self.control_port, self.socks_port)
             print("Killing tor process")
-            self.tor_process.kill()
+            if self.tor_process.kill() is 0:
+                wl_log.warning("TorController에서 프로세스 킬링 완료... %s, 컨트롤 포트 %s, 소캣 포트 %s", self.tor_process, self.control_port, self.socks_port)
+            else:
+                wl_log.warning("TorController에서 프로세스 킬링 실패... %s, 컨트롤 포트 %s, 소캣 포트 %s", self.tor_process, self.control_port, self.socks_port)
         if self.tmp_tor_data_dir and isdir(self.tmp_tor_data_dir):
             print("Removing tmp tor data dir")
             shutil.rmtree(self.tmp_tor_data_dir)
@@ -83,6 +90,7 @@ class TorController(object):
 
         print(("Tor config: %s" % self.torrc_dict))
         # the following may raise, make sure it's handled
+        # 문제가 생기는 부분 > 토르 restart 부분
         self.tor_process = stem.process.launch_tor_with_config(
             config=self.torrc_dict,
             init_msg_handler=self.tor_log_handler,
@@ -91,6 +99,7 @@ class TorController(object):
         )
         self.controller = Controller.from_port(port=self.control_port)
         self.controller.authenticate()
+        wl_log.warning("TorController에서 토르 프로세스 할당 완료... %s, 컨트롤 포트 %s, 소캣 포트 %s", self.tor_process, self.control_port, self.socks_port)
         return self.tor_process
 
     def close_all_streams(self):
@@ -107,10 +116,18 @@ class TorController(object):
         except:
             print("Exception closing stream")
 
+##########################################################
     @contextmanager
     def launch(self):
+        wl_log.warning("TorController에서 launch 하는 중")
         self.launch_tor_service()
-        yield
+        #yield
+        #self.quit()
+        #wl_log.warning("TorController에서 launch 완료")
+
+    ##########################################################
+    #launch랑 quit 분리
+    def tor_quit(self):
         self.quit()
-
-
+        wl_log.warning("TorController에서 launch 완료")
+##################################################################
