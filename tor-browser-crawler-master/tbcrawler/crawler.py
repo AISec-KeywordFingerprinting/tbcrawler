@@ -1,9 +1,9 @@
 import sys
-from os.path import join, split
+from os.path import join, split, getsize
 from pprint import pformat
 from time import sleep, time
 
-from selenium.common.exceptions import TimeoutException, WebDriverException
+from selenium.common.exceptions import TimeoutException, WebDriverException, ElementNotVisibleException, NoSuchElementException
 from selenium.webdriver.common.by import By
 
 import tbcrawler.common as cm
@@ -11,6 +11,13 @@ import tbcrawler.utils as ut
 from tbcrawler.dumputils import Sniffer
 from tbcrawler.log import wl_log
 
+import random
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+#added action chains for clicking element
+from bs4 import BeautifulSoup
 
 class Crawler(object):
     def __init__(self, driver, controller, screenshots=True, device="eth0"):
@@ -48,6 +55,7 @@ class Crawler(object):
         If the controller is configured to not pollute the profile, each
         restart forces to switch the entry guard.
         """
+        #with self.controller.launch():
         for self.job.site in range(len(self.job.urls)):
             if len(self.job.url) > cm.MAX_FNAME_LENGTH:
                 wl_log.warning("URL is too long: %s" % self.job.url)
@@ -58,14 +66,14 @@ class Crawler(object):
     def _do_instance(self):
         for self.job.visit in range(self.job.visits):
             ut.create_dir(self.job.path)
-            wl_log.info("*** 사이트를 방문 중입니다!! Visit #%s to %s ***", self.job.visit, self.job.url)
+            wl_log.info("*** 키워드 검색 중... Visit #%s to %s ***", self.job.visit, self.job.url)
             #self.job.screen_num = 0
             with self.driver.launch():
                 try:
                     self.driver.set_page_load_timeout(cm.SOFT_VISIT_TIMEOUT)
                 except WebDriverException as seto_exc:
                     wl_log.error("Setting soft timeout %s", seto_exc)
-            self._do_restart()    
+                self._do_restart()    
             sleep(float(self.job.config['pause_between_loads']))
             self.post_visit()
     
@@ -84,15 +92,45 @@ class Crawler(object):
                      device=self.device, dumpcap_log=self.job.pcap_log):
             sleep(1)  # make sure dumpcap is running
             
-            isCaptcha = True
+            isCaptcha = False
             if not isCaptcha:
                 try:
                     screenshot_count = 0
                     with ut.timeout(cm.HARD_VISIT_TIMEOUT):
                         # begin loading page
-                        self.driver.get(self.job.url)
-                        sleep(1)  # sleep to catch some lingering AJAX-type traffic
+                        # self.driver.get(self.job.url)
+                        # sleep(1)  # sleep to catch some lingering AJAX-type traffic
                         
+                        ##################################################################################
+                        # type keyword character by character
+                        self.driver.get('http://www.google.com')
+                        self.driver.implicitly_wait(1000)
+                        sleep(3)
+                    
+                        try:
+                            search = self.driver.find_element(By.NAME, 'q')
+                            search_btn = self.driver.find_element(By.NAME, 'btnK')
+                            
+                            a = self.job.url
+                            for c in list(a):
+                                # 검색창에 키워드 입력 시 랜덤하게 발생하는 에러: Unknown exception: Message: Element <input class="gLFyf" name="q" type="text"> is not reachable by keyboard -> 이 에러가 발생하면 검색창에 키워드 입력이 안 됨, 스크린샷이 안 찍힘)
+                                wl_log.warning("키워드 가져옴 %c", c)
+                                WebDriverWait(self.driver,1).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input"))).send_keys(c)
+                                #search.send_keys(c)
+                                sleep(random.uniform(0.1, 0.7))
+                            #search_btn.submit() # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력이 되어 있고, 아래 연관 검색어 있는 상태)
+                            search.send_keys(Keys.RETURN) # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력만 된 상태)
+                            #search_btn.click() # 에러 메세지-CAPTCHA!(스크린샷은 캡챠)
+                            #WebDriverWait(self.driver,1).until(EC.presence_of_element_located((By.XPATH, "//*/form/div[1]/div[1]/div[1]/div/div[2]/input"))).send_keys(Keys.ENTER) # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력만 된 상태)
+                            #WebDriverWait(self.driver,1).until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[4]/center/input[1]"))).click() # 에러 발생-element <input class="gNO89b" name="btnK" type="submit"> is not clickable at point (415,271) because another element <div class="pcTkSc"> obscures it
+                            sleep(1)
+                            
+                        except (ElementNotVisibleException, NoSuchElementException,TimeoutException):
+                            wl_log.warning("try 실행 안됨")
+                            result = "CAPTCHA"
+                            print("Exception!!")
+                        
+                        ##################################################################################
                         # take first screenshot
                         if self.screenshots:
                             try:
@@ -100,6 +138,19 @@ class Crawler(object):
                                 screenshot_count += 1
                             except WebDriverException:
                                 wl_log.error("Cannot get screenshot.")
+                        ##################################################################################
+                        #check html file size
+                        html_source = self.driver.page_source
+                        html_source = html_source.encode('utf-8').decode('ascii', 'ignore')
+                        soup = BeautifulSoup(html_source, "lxml")
+
+                        with open(self.job.path + "htmlfile.txt", 'w') as f_html:
+                            f_html.write(soup.prettify())
+                        b = getsize(self.job.path + "htmlfile.txt")
+                        print("out_png size->" + str(b))
+                        if b<=10000: # smaller than 10kb
+                            print("CAPTCHA!")
+                        ##################################################################################
                                 
                 except (cm.HardTimeoutException, TimeoutException):
                     wl_log.error("Visit to %s reached hard timeout!", self.job.url)

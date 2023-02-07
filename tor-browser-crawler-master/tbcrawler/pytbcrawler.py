@@ -113,9 +113,9 @@ def parse_url_list(file_path, start, stop):
             url_list = url_list[start - 1:stop]
             processed_list = []
             for url in url_list:
-                parsed = urlparse(url)
-                if not parsed.hostname:
-                    raise ValueError('URL {} has invalid hostname!'.format(url))
+                #parsed = urlparse(url)
+                #if not parsed.hostname:
+                    #raise ValueError('URL {} has invalid hostname!'.format(url))
                 processed_list.append(url)
     except Exception as e:
         wl_log.error("while parsing URL list: {} \n{}".format(e, traceback.format_exc()))
