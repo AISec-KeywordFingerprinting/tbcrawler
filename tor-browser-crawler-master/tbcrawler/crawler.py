@@ -93,9 +93,46 @@ class Crawler(object):
                     screenshot_count = 0
                     with ut.timeout(cm.HARD_VISIT_TIMEOUT):
                         # begin loading page
+<<<<<<< Updated upstream
                         self.driver.get(self.job.url)
                         sleep(1)  # sleep to catch some lingering AJAX-type traffic
 
+=======
+                        # self.driver.get(self.job.url)
+                        # sleep(1)  # sleep to catch some lingering AJAX-type traffic
+                        
+                        ##################################################################################
+                        # type keyword character by character
+                        self.driver.get('http://www.google.com')
+                        self.driver.implicitly_wait(1000)
+                        sleep(3)
+                    
+                        try:
+                            search = self.driver.find_element(By.NAME, 'q')
+                            search_btn = self.driver.find_element(By.NAME, 'btnK')
+                            
+                            a = self.job.url
+                            for c in list(a):
+                                # 검색창에 키워드 입력 시 랜덤하게 발생하는 에러: Unknown exception: Message: Element <input class="gLFyf" name="q" type="text"> is not reachable by keyboard -> 이 에러가 발생하면 검색창에 키워드 입력이 안 됨, 스크린샷이 안 찍힘)
+                                wl_log.warning("키워드 가져옴 %c", c)
+                                WebDriverWait(self.driver,1).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input"))).send_keys(c)
+
+                                #search.send_keys(c)
+                                sleep(random.uniform(0.1, 0.7))
+                            #search_btn.submit() # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력이 되어 있고, 아래 연관 검색어 있는 상태)
+                            search.send_keys(Keys.RETURN) # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력만 된 상태)
+                            #search_btn.click() # 에러 메세지-CAPTCHA!(스크린샷은 캡챠)
+                            #WebDriverWait(self.driver,1).until(EC.presence_of_element_located((By.XPATH, "//*/form/div[1]/div[1]/div[1]/div/div[2]/input"))).send_keys(Keys.ENTER) # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력만 된 상태)
+                            #WebDriverWait(self.driver,1).until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[2]/div[2]/div[5]/center/input[1]"))).click() #0208 xpath 교체 # 에러 발생-element <input class="gNO89b" name="btnK" type="submit"> is not clickable at point (415,271) because another element <div class="pcTkSc"> obscures it ->  xpath 교체 완료 ->
+                            sleep(1)
+                            
+                        except (ElementNotVisibleException, NoSuchElementException,TimeoutException):
+                            wl_log.warning("try 실행 안됨")
+                            result = "CAPTCHA"
+                            print("Exception!!")
+                        
+                        ##################################################################################
+>>>>>>> Stashed changes
                         # take first screenshot
                         if self.screenshots:
                             try:
