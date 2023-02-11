@@ -86,8 +86,8 @@ class Crawler(object):
             self.controller.restart_tor()
             wl_log.warning("Crawler에서 토르 프로세스 재시작 완료")
             self._do_restart()
-    ##################################################################################
-            
+    ##################################################################################  
+        
     def _do_visit(self):
         with Sniffer(path=self.job.pcap_file, filter=cm.DEFAULT_FILTER,
                      device=self.device, dumpcap_log=self.job.pcap_log):
@@ -98,41 +98,32 @@ class Crawler(object):
                 try:
                     screenshot_count = 0
                     with ut.timeout(cm.HARD_VISIT_TIMEOUT):
-                        # begin loading page
-                        # self.driver.get(self.job.url)
-                        # sleep(1)  # sleep to catch some lingering AJAX-type traffic
-                        
+                                   
                         ##################################################################################
                         # type keyword character by character
                         self.driver.get('http://www.google.com')
-                        #self.driver.get('http://www.google.com/search?q=.') # 접근 안됨. 404에러가 뜸.
                         
                         wait = WebDriverWait(self.driver,3)
                         action = ActionChains(self.driver)
-                        
-                        self.driver.implicitly_wait(1000)
-                        sleep(3)
+                        sleep(1)  # do not change - wait until web page is loaded
                     
                         try:
-                            try:
+                            try: # check if there is cookie pop-up
+                                self.driver.implicitly_wait(0) # do not change - avoid collision with WebDriverWait
                                 wl_log.info("check if there is cookie pop-up")
-                                cookie = wait.until(EC.presence_of_element_located((By.ID, 'L2AGLb')))
+                                cookie = WebDriverWait(self.driver,3).until(EC.presence_of_element_located((By.ID, 'L2AGLb')))
                                 if cookie.is_displayed():
                                     wl_log.info("cookie pop-up exists, click 'Accept all' button")
                                     cookie.click()
-                            except (ElementNotVisibleException, NoSuchElementException, TimeoutException):
-                                wl_log.info("no cookie pop-up, send keyword to input box")
+                            except Exception as exc:
+                                wl_log.error("Exception: cookie pop-up do not exists")
+                                pass
+                                
+                            search = wait.until(EC.element_to_be_clickable((By.NAME, "q")))
+                            #search = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input")))
 
-                            search = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input")))
-                            wl_log.info(search)
-                            #wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'dbXO9'))).click()
-                            #search = wait.until(EC.element_to_be_clickable((By.NAME, "q")))
-                            ####action.click(on_element = search)
-                            ##search.click()
                             #search_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[4]/center/input[1]")))
-                            #search = self.driver.find_element_by_name("q")
                             #search.click() # Unknown exception: Message: Element <input class="gLFyf" name="q" type="text"> is not clickable at point (497,200) because another element <ul class="dbXO9"> obscures it / Message: Element <input class="gLFyf" name="q" type="text"> is not clickable at point (497,258) because another element <li class="gowsYd v8Bpfb"> obscures it
-                            #search_btn = self.driver.find_element_by_name("btnK")
                             #search = self.driver.find_element(By.NAME, 'q')
                             #search_btn = self.driver.find_element(By.NAME, 'btnK')
                             
@@ -140,42 +131,29 @@ class Crawler(object):
                             for c in list(a):
                                 # 검색창에 키워드 입력 시 랜덤하게 발생하는 에러: Unknown exception: Message: Element <input class="gLFyf" name="q" type="text"> is not reachable by keyboard -> 이 에러가 발생하면 검색창에 키워드 입력이 안 됨, 스크린샷이 안 찍힘)
                                 wl_log.info("키워드 가져옴 %c", c)
-                                WebDriverWait(self.driver,1).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input"))).send_keys(c)
-                                sleep(random.uniform(0.1, 0.7))
+                                search.send_keys(c)
+                                sleep(random.uniform(0.7, 1.5))
                                 #WebDriverWait(self.driver,1).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input"))).send_keys(c)
-                                #search.send_keys(c)s
                                 ####action.send_keys(c)
-                                #wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'gLFyf'))).send_keys(c)
                                 #wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'gLFyf'))).send_keys(Keys.ENTER) # 이상한 점: for문 안에 넣어도 아예 실행이 안됨?
-                            search.submit() # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력이 되어 있고, 아래 연관 검색어 있는 상태)
-                            self.driver.implicitly_wait(1000)
+                            sleep(3)
+                            search.send_keys(Keys.ENTER)
+                            #search.submit() # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력이 되어 있고, 아래 연관 검색어 있는 상태)
                             #wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'gLFyf'))).send_keys('\n') # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력이 되어 있고, 아래 연관 검색어 있는 상태)
                             #wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'gLFyf'))).submit()
                             #wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'gLFyf'))).send_keys(Keys.ENTER)
                             ####search_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[2]/div[2]/div[5]/center/input[1]")))
                             ####search_btn.click()
                             ##search = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input")))
-                            #search.send_keys(Keys.ENTER)
                             ##action.send_keys(Keys.RETURN).perform()
                             ####search.send_keys(Keys.RETURN)# 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력만 된 상태) / Unknown exception: 'NoneType' object has no attribute 'perform'
                             #search_btn.click() # 에러 메세지-CAPTCHA!(스크린샷은 캡챠)
                             #WebDriverWait(self.driver,1).until(EC.presence_of_element_located((By.XPATH, "//*/form/div[1]/div[1]/div[1]/div/div[2]/input"))).send_keys(Keys.ENTER) # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력만 된 상태)
                             #WebDriverWait(self.driver,1).until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[4]/center/input[1]"))).click() # 에러 발생-element <input class="gNO89b" name="btnK" type="submit"> is not clickable at point (415,271) because another element <div class="pcTkSc"> obscures it
-                            
-                            
                         except (ElementNotVisibleException, NoSuchElementException,TimeoutException):
                             wl_log.warning("try 실행 안됨")
                             result = "CAPTCHA"
                             print("Exception!!")
-                        
-                        ##################################################################################
-                        # take first screenshot
-                        #if self.screenshots:
-                        #    try:
-                        #        self.driver.get_screenshot_as_file(self.job.png_file(screenshot_count))
-                        #        screenshot_count += 1
-                        #    except WebDriverException:
-                        #        wl_log.error("Cannot get screenshot.")
                         ##################################################################################
                         #check html file size
                         html_source = self.driver.page_source
@@ -190,8 +168,10 @@ class Crawler(object):
                             print("CAPTCHA!")
                         ##################################################################################
                         # take first screenshot
-                        #self.driver.implicitly_wait(1000)
-                        #sleep(3)
+                        sleep(5)
+                        #framename = wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe"))).get_attribute("name")
+                        #self.driver.switch_to().frame(framename)
+                        #wait.until(EC.element_to_be_clickable((By.XPATH, "//span[@id='recaptcha-anchor']"))).click();
                         if self.screenshots:
                             try:
                                 self.driver.get_screenshot_as_file(self.job.png_file(screenshot_count))
@@ -203,9 +183,6 @@ class Crawler(object):
                     wl_log.error("Visit to %s reached hard timeout!", self.job.url)
                 except Exception as exc:
                     wl_log.error("Unknown exception: %s", exc)
-                    #if self.driver.find_element(By.PARTIAL_LINK_TEXT, "not a robot") is not None:
-                    #    wl_log.info(self.driver.find_element(By.PARTIAL_LINK_TEXT, "not a robot"))
-                    #    wl_log.warning("캡챠 페이지로 넘어간것임")
             else:
                 isCaptcha = True
                 wl_log.error("CAPTCHA!")
