@@ -99,8 +99,11 @@ class Crawler(object):
                         for c in list(a):
                             search.send_keys(c)
                             #time.sleep(random.uniform(0.1, 0.7))
-                            self.driver.implicitly_wait(random.uniform(0.1, 0.7))
-                        search.send_keys(Keys.RETURN)
+                            #self.driver.implicitly_wait(random.uniform(0.1, 0.7))
+                            self.driver.implicitly_wait(1)
+                        #search.send_keys(Keys.RETURN)
+                        self.driver.find_element(By.XPATH, '/html/body/div[1]/div[3]/form/div[1]/div[1]/div[4]/center/input[1]').submit()
+                        self.driver.implicitly_wait(1)
                     except (ElementNotVisibleException, NoSuchElementException,TimeoutException):
                         result = "CAPTCHA"
                         print("Exception!!")
@@ -119,9 +122,9 @@ class Crawler(object):
                     html_source = html_source.encode('utf-8').decode('ascii', 'ignore')
                     soup = BeautifulSoup(html_source, "lxml")
 
-                    with open(self.job.path + "htmlfile.txt", 'w') as f_html:
+                    with open(self.job.html_file(screenshot_count), 'w') as f_html:
                         f_html.write(soup.prettify())
-                    b = os.path.getsize(self.job.path + "htmlfile.txt")
+                    b = os.path.getsize(self.job.html_file(screenshot_count))
                     print("out_png size->" + b)
                     if b<=10000: # smaller than 10kb
                         print("CAPTCHA!")
@@ -168,6 +171,11 @@ class CrawlJob(object):
 
     def png_file(self, time):
         return join(self.path, "screenshot_{}.png".format(time))
+
+    #########################################################################################
+    def html_file(self, time):
+        return join(self.path, "html_{}.html".format(time))
+    ########################################################################################
 
     def __repr__(self):
         return "Batches: %s, Sites: %s, Visits: %s" \
