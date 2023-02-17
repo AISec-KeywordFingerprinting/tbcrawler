@@ -101,14 +101,15 @@ class Crawler(object):
                                    
                         ##################################################################################
                         # type keyword character by character
-                        self.driver.get('http://www.google.com')
+                        self.driver.get('http://www.google.com') #google
+                        #self.driver.get('http://www.bing.com') #bing
+                        #self.driver.get('http://www.duckduckgo.com') #duckduckgo
                         
                         wait = WebDriverWait(self.driver,3)
-                        action = ActionChains(self.driver)
                         sleep(1)  # do not change - wait until web page is loaded
                     
                         try:
-                            try: # check if there is cookie pop-up
+                            try: #google: check if there is cookie pop-up
                                 self.driver.implicitly_wait(0) # do not change - avoid collision with WebDriverWait
                                 wl_log.info("check if there is cookie pop-up")
                                 cookie = WebDriverWait(self.driver,3).until(EC.presence_of_element_located((By.ID, 'L2AGLb')))
@@ -120,36 +121,16 @@ class Crawler(object):
                                 pass
                                 
                             search = wait.until(EC.element_to_be_clickable((By.NAME, "q")))
-                            #search = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input")))
-
-                            #search_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[4]/center/input[1]")))
-                            #search.click() # Unknown exception: Message: Element <input class="gLFyf" name="q" type="text"> is not clickable at point (497,200) because another element <ul class="dbXO9"> obscures it / Message: Element <input class="gLFyf" name="q" type="text"> is not clickable at point (497,258) because another element <li class="gowsYd v8Bpfb"> obscures it
-                            #search = self.driver.find_element(By.NAME, 'q')
-                            #search_btn = self.driver.find_element(By.NAME, 'btnK')
                             
                             a = self.job.url
                             for c in list(a):
-                                # 검색창에 키워드 입력 시 랜덤하게 발생하는 에러: Unknown exception: Message: Element <input class="gLFyf" name="q" type="text"> is not reachable by keyboard -> 이 에러가 발생하면 검색창에 키워드 입력이 안 됨, 스크린샷이 안 찍힘)
                                 wl_log.info("키워드 가져옴 %c", c)
                                 search.send_keys(c)
                                 sleep(random.uniform(0.7, 1.5))
-                                #WebDriverWait(self.driver,1).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input"))).send_keys(c)
-                                ####action.send_keys(c)
-                                #wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'gLFyf'))).send_keys(Keys.ENTER) # 이상한 점: for문 안에 넣어도 아예 실행이 안됨?
-                            sleep(3)
+                            sleep(1)
                             search.send_keys(Keys.ENTER)
-                            #search.submit() # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력이 되어 있고, 아래 연관 검색어 있는 상태)
-                            #wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'gLFyf'))).send_keys('\n') # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력이 되어 있고, 아래 연관 검색어 있는 상태)
-                            #wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'gLFyf'))).submit()
-                            #wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'gLFyf'))).send_keys(Keys.ENTER)
-                            ####search_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[2]/div[2]/div[5]/center/input[1]")))
-                            ####search_btn.click()
-                            ##search = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input")))
-                            ##action.send_keys(Keys.RETURN).perform()
-                            ####search.send_keys(Keys.RETURN)# 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력만 된 상태) / Unknown exception: 'NoneType' object has no attribute 'perform'
-                            #search_btn.click() # 에러 메세지-CAPTCHA!(스크린샷은 캡챠)
-                            #WebDriverWait(self.driver,1).until(EC.presence_of_element_located((By.XPATH, "//*/form/div[1]/div[1]/div[1]/div/div[2]/input"))).send_keys(Keys.ENTER) # 검색 결과 안 넘어감(스크린샷은 검색창에 키워드 입력만 된 상태)
-                            #WebDriverWait(self.driver,1).until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[3]/form/div[1]/div[1]/div[4]/center/input[1]"))).click() # 에러 발생-element <input class="gNO89b" name="btnK" type="submit"> is not clickable at point (415,271) because another element <div class="pcTkSc"> obscures it
+                            sleep(10) #bing, duckduckgo               
+                            
                         except (ElementNotVisibleException, NoSuchElementException,TimeoutException):
                             wl_log.warning("try 실행 안됨")
                             result = "CAPTCHA"
@@ -168,10 +149,7 @@ class Crawler(object):
                             print("CAPTCHA!")
                         ##################################################################################
                         # take first screenshot
-                        sleep(5)
-                        #framename = wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe"))).get_attribute("name")
-                        #self.driver.switch_to().frame(framename)
-                        #wait.until(EC.element_to_be_clickable((By.XPATH, "//span[@id='recaptcha-anchor']"))).click();
+                        sleep(0.25)
                         if self.screenshots:
                             try:
                                 self.driver.get_screenshot_as_file(self.job.png_file(screenshot_count))
