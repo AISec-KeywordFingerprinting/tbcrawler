@@ -12,6 +12,7 @@ from tbcrawler.dumputils import Sniffer
 from tbcrawler.log import wl_log
 
 import random
+from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -141,12 +142,14 @@ class Crawler(object):
                         html_source = html_source.encode('utf-8').decode('ascii', 'ignore')
                         soup = BeautifulSoup(html_source, "lxml")
 
-                        with open(self.job.path + "htmlfile.txt", 'w') as f_html:
+                        with open(self.job.html_file(screenshot_count), 'w') as f_html:
                             f_html.write(soup.prettify())
-                        b = getsize(self.job.path + "htmlfile.txt")
+                        b = getsize(self.job.html_file(screenshot_count))
                         print("out_png size->" + str(b))
                         if b<=10000: # smaller than 10kb
+                            isCaptcha = True
                             print("CAPTCHA!")
+                            return isCaptcha
                         ##################################################################################
                         # take first screenshot
                         sleep(0.25)
@@ -202,6 +205,11 @@ class CrawlJob(object):
 
     def png_file(self, time):
         return join(self.path, "screenshot_{}.png".format(time))
+    
+    #########################################################################################
+    def html_file(self, time):
+        return join(self.path, "html_{}.html".format(time))
+    ########################################################################################
 
     def __repr__(self):
         return "Batches: %s, Sites: %s, Visits: %s" \
