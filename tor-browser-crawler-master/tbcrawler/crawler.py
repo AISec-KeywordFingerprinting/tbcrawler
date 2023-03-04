@@ -1,5 +1,7 @@
 import sys
+import subprocess
 from os.path import join, split, getsize
+from os import remove
 from pprint import pformat
 from time import sleep, time
 
@@ -51,7 +53,6 @@ class Crawler(object):
             wl_log.error("Check pcap: %s", self.job.pcap_file)
 
     def _do_batch(self):
-        wl_log.info("*** do batch 실행 중 ***")
         """
         Must init/restart the Tor process to have a different circuit.
         If the controller is configured to not pollute the profile, each
@@ -68,7 +69,7 @@ class Crawler(object):
     def _do_instance(self):
         for self.job.visit in range(self.job.visits):
             ut.create_dir(self.job.path)
-            wl_log.info("*** 키워드 검색 중... Visit #%s to %s ***", self.job.visit, self.job.url)
+            wl_log.info("*** Visit #%s to %s ***", self.job.visit, self.job.url)
             #self.job.screen_num = 0
             with self.driver.launch():
                 try:
@@ -80,12 +81,14 @@ class Crawler(object):
             self.post_visit()
     
     ##################################################################################
-    #만약 캡챠가 맞다면, Tor 경로 새롭게 설정 후 다시 방문하는 함수
     def _do_restart(self):
+        """
+        Must restart Tor process and revisit keyword if there is CAPTCHA
+        """
         if self._do_visit() is True: 
-            wl_log.warning("Crawler에서 토르 프로세스 재시작 중")
+            wl_log.warning("*** restarting Tor process ***")
             self.controller.restart_tor()
-            wl_log.warning("Crawler에서 토르 프로세스 재시작 완료")
+            wl_log.warning("restarted Tor process")
             self._do_restart()
     ##################################################################################  
         
@@ -102,14 +105,15 @@ class Crawler(object):
                                    
                         ##################################################################################
                         # type keyword character by character
-                        self.driver.get('http://www.google.com') #google
-                        #self.driver.get('http://www.bing.com') #bing
+                        #self.driver.get('http://www.google.com') #google
+                        self.driver.get('http://www.bing.com') #bing
                         #self.driver.get('http://www.duckduckgo.com') #duckduckgo
                         
                         wait = WebDriverWait(self.driver,3)
                         sleep(1)  # do not change - wait until web page is loaded
-                    
+                        
                         try:
+                            """
                             try: #google: check if there is cookie pop-up
                                 self.driver.implicitly_wait(0) # do not change - avoid collision with WebDriverWait
                                 wl_log.info("check if there is cookie pop-up")
@@ -120,12 +124,12 @@ class Crawler(object):
                             except Exception as exc:
                                 wl_log.error("Exception: cookie pop-up do not exists")
                                 pass
+                            """
                                 
                             search = wait.until(EC.element_to_be_clickable((By.NAME, "q")))
                             
                             a = self.job.url
                             for c in list(a):
-                                wl_log.info("키워드 가져옴 %c", c)
                                 search.send_keys(c)
                                 sleep(random.uniform(0.7, 1.5))
                             sleep(1)
@@ -133,9 +137,8 @@ class Crawler(object):
                             sleep(10) #bing, duckduckgo               
                             
                         except (ElementNotVisibleException, NoSuchElementException,TimeoutException):
-                            wl_log.warning("try 실행 안됨")
                             result = "CAPTCHA"
-                            print("Exception!!")
+                            print("Exception!")
                         ##################################################################################
                         #check html file size
                         html_source = self.driver.page_source
@@ -152,14 +155,21 @@ class Crawler(object):
                             return isCaptcha
                         ##################################################################################
                         # take first screenshot
-                        sleep(0.25)
+                        sleep(3)
                         if self.screenshots:
                             try:
                                 self.driver.get_screenshot_as_file(self.job.png_file(screenshot_count))
                                 screenshot_count += 1
                             except WebDriverException:
                                 wl_log.error("Cannot get screenshot.")
-                                
+                        ##################################################################################
+                        # analyze pcap file
+                        with open(self.job.output_file(self.job.site, self.job.batch*self.job.visits+self.job.visit), 'w') as outfile:
+                            subprocess.run(["tshark", "-r", self.job.pcap_file, "-T", "fields", "-e", "frame.time_relative", "-e", "tcp.len", "-E", "header=n", "-E", "separator=\t", "-E", "occurrence=f"], stdout=outfile, check=True)
+                        # delete pcap file after analysis
+                        # remove(self.job.pcap_file)
+                        # remove(self.job.pcap_file_original)
+                        ##################################################################################
                 except (cm.HardTimeoutException, TimeoutException):
                     wl_log.error("Visit to %s reached hard timeout!", self.job.url)
                 except Exception as exc:
@@ -185,6 +195,12 @@ class CrawlJob(object):
     @property
     def pcap_file(self):
         return join(self.path, "capture.pcap")
+        
+    ######################################################################################### 
+    @property
+    def pcap_file_original(self):
+        return join(self.path, "capture.pcap.original")
+    #########################################################################################
 
     @property
     def pcap_log(self):
@@ -209,6 +225,9 @@ class CrawlJob(object):
     #########################################################################################
     def html_file(self, time):
         return join(self.path, "html_{}.html".format(time))
+        
+    def output_file(self, keywordIndex, instanceIndex):
+        return join(self.path, "{}-{}.txt".format(keywordIndex, instanceIndex))
     ########################################################################################
 
     def __repr__(self):
