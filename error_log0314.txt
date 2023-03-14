@@ -1,0 +1,318 @@
+Get:1 http://deb.debian.org/debian bullseye InRelease [116 kB]
+Get:2 http://deb.debian.org/debian-security bullseye-security InRelease [48.4 kB]
+Get:3 http://deb.debian.org/debian bullseye-updates InRelease [44.1 kB]
+Get:4 http://deb.debian.org/debian bullseye/main amd64 Packages [8183 kB]
+Get:5 http://deb.debian.org/debian-security bullseye-security/main amd64 Packages [236 kB]
+Get:6 http://deb.debian.org/debian bullseye-updates/main amd64 Packages [14.6 kB]
+Fetched 8642 kB in 3s (3034 kB/s)                       
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+28 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  libatm1 libbpf0 libxtables12
+Suggested packages:
+  iproute2-doc
+The following NEW packages will be installed:
+  iproute2 libatm1 libbpf0 libxtables12
+0 upgraded, 4 newly installed, 0 to remove and 28 not upgraded.
+Need to get 1145 kB of archives.
+After this operation, 3438 kB of additional disk space will be used.
+Do you want to continue? [Y/n] Y
+Get:1 http://deb.debian.org/debian bullseye/main amd64 libbpf0 amd64 1:0.3-2 [98.3 kB]
+Get:2 http://deb.debian.org/debian bullseye/main amd64 libxtables12 amd64 1.8.7-1 [45.1 kB]
+Get:3 http://deb.debian.org/debian bullseye/main amd64 iproute2 amd64 5.10.0-4 [930 kB]
+Get:4 http://deb.debian.org/debian bullseye/main amd64 libatm1 amd64 1:2.5.1-4 [71.3 kB]
+Fetched 1145 kB in 0s (5558 kB/s)  
+debconf: delaying package configuration, since apt-utils is not installed
+Selecting previously unselected package libbpf0:amd64.
+(Reading database ... 36213 files and directories currently installed.)
+Preparing to unpack .../libbpf0_1%3a0.3-2_amd64.deb ...
+Unpacking libbpf0:amd64 (1:0.3-2) ...
+Selecting previously unselected package libxtables12:amd64.
+Preparing to unpack .../libxtables12_1.8.7-1_amd64.deb ...
+Unpacking libxtables12:amd64 (1.8.7-1) ...
+Selecting previously unselected package iproute2.
+Preparing to unpack .../iproute2_5.10.0-4_amd64.deb ...
+Unpacking iproute2 (5.10.0-4) ...
+Selecting previously unselected package libatm1:amd64.
+Preparing to unpack .../libatm1_1%3a2.5.1-4_amd64.deb ...
+Unpacking libatm1:amd64 (1:2.5.1-4) ...
+Setting up libatm1:amd64 (1:2.5.1-4) ...
+Setting up libxtables12:amd64 (1.8.7-1) ...
+Setting up libbpf0:amd64 (1:0.3-2) ...
+Setting up iproute2 (5.10.0-4) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 78.)
+debconf: falling back to frontend: Readline
+Processing triggers for libc-bin (2.31-13+deb11u5) ...
+/home/docker/tbcrawl /
+2023-03-14 09:47:16,365 -                     DEBUG - Command line parameters: ['./bin/tbcrawler.py', '-c', 'wang_and_goldberg', '-u', './sites.txt', '--timeout', '2', '-s', '-d', 'enp0s3', '-v']
+2023-03-14 09:47:17,375 -                     INFO - Starting new crawl
+2023-03-14 09:47:17,377 -                     INFO - Batches: 10, Sites: 4, Visits: 1
+2023-03-14 09:47:17,379 -                     INFO - **** Starting batch 0 ***
+Tor config: {'maxcircuitdirtiness': '600000', 'useentryguards': '0', 'controlport': '9051', 'socksport': '9050', 'socksbindaddress': '127.0.0.1'}
+Mar 14 09:47:17.747 [notice] Tor 0.4.4.6 (git-2a8b789ea6f308d0) running on Linux with Libevent 2.1.11-stable, OpenSSL 1.1.1i, Zlib 1.2.11, Liblzma N/A, and Libzstd N/A.
+Mar 14 09:47:17.747 [notice] Tor can't help you if you use it wrong! Learn how to be safe at https://www.torproject.org/download/download#warning
+Mar 14 09:47:17.768 [warn] Skipping obsolete configuration option "SocksListenAddress".
+Mar 14 09:47:17.771 [warn] ControlPort is open, but no authentication method has been configured.  This means that any program on your computer can reconfigure your Tor.  That's bad!  You should upgrade your Tor controller as soon as possible.
+Mar 14 09:47:17.773 [notice] Opening Socks listener on 127.0.0.1:9050
+Mar 14 09:47:17.773 [notice] Opened Socks listener on 127.0.0.1:9050
+Mar 14 09:47:17.773 [notice] Opening Control listener on 127.0.0.1:9051
+Mar 14 09:47:17.773 [notice] Opened Control listener on 127.0.0.1:9051
+Mar 14 09:47:17.000 [warn] You are running Tor as root. You don't need to, and you probably shouldn't.
+Mar 14 09:47:17.000 [notice] Bootstrapped 0% (starting): Starting
+Mar 14 09:47:17.000 [notice] Starting with guard context "default"
+Mar 14 09:47:18.000 [notice] Bootstrapped 5% (conn): Connecting to a relay
+Mar 14 09:47:19.000 [notice] Bootstrapped 10% (conn_done): Connected to a relay
+Mar 14 09:47:20.000 [notice] Bootstrapped 14% (handshake): Handshaking with a relay
+Mar 14 09:47:21.000 [notice] Bootstrapped 15% (handshake_done): Handshake with a relay done
+Mar 14 09:47:21.000 [notice] Bootstrapped 20% (onehop_create): Establishing an encrypted directory connection
+Mar 14 09:47:21.000 [notice] Bootstrapped 25% (requesting_status): Asking for networkstatus consensus
+Mar 14 09:47:21.000 [notice] Bootstrapped 30% (loading_status): Loading networkstatus consensus
+Mar 14 09:47:30.000 [notice] I learned some more directory information, but not enough to build a circuit: We have no usable consensus.
+Mar 14 09:47:30.000 [notice] Bootstrapped 40% (loading_keys): Loading authority key certs
+Mar 14 09:47:31.000 [notice] The current consensus has no exit nodes. Tor can only build internal paths, such as paths to onion services.
+Mar 14 09:47:31.000 [notice] Bootstrapped 45% (requesting_descriptors): Asking for relay descriptors
+Mar 14 09:47:31.000 [notice] I learned some more directory information, but not enough to build a circuit: We need more microdescriptors: we have 0/6497, and can only build 0% of likely paths. (We have 0% of guards bw, 0% of midpoint bw, and 0% of end bw (no exits in consensus, using mid) = 0% of path bw.)
+Mar 14 09:47:33.000 [notice] Bootstrapped 50% (loading_descriptors): Loading relay descriptors
+Mar 14 09:47:34.000 [notice] The current consensus contains exit nodes. Tor can build exit and internal paths.
+Mar 14 09:47:35.000 [notice] Bootstrapped 56% (loading_descriptors): Loading relay descriptors
+Mar 14 09:47:37.000 [notice] Bootstrapped 63% (loading_descriptors): Loading relay descriptors
+Mar 14 09:47:39.000 [notice] Bootstrapped 68% (loading_descriptors): Loading relay descriptors
+Mar 14 09:48:01.000 [notice] Bootstrapped 75% (enough_dirinfo): Loaded enough directory info to build circuits
+Mar 14 09:48:01.000 [notice] Bootstrapped 80% (ap_conn): Connecting to a relay to build circuits
+Mar 14 09:48:02.000 [notice] Bootstrapped 85% (ap_conn_done): Connected to a relay to build circuits
+Mar 14 09:48:02.000 [notice] Bootstrapped 89% (ap_handshake): Finishing handshake with a relay to build circuits
+Mar 14 09:48:03.000 [notice] Bootstrapped 90% (ap_handshake_done): Handshake finished with a relay to build circuits
+Mar 14 09:48:03.000 [notice] Bootstrapped 95% (circuit_create): Establishing a Tor circuit
+Mar 14 09:48:05.000 [notice] Bootstrapped 100% (done): Done
+2023-03-14 09:48:05,283 -                     INFO - *** Visit #0 to apple ***
+2023-03-14 09:48:17,589 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/0_0_0/capture.pcap
+2023-03-14 09:48:17,695 -                     DEBUG - capture started in 0.09999999999999964 seconds
+Exception!
+out_png size->92126
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:48:37,553 -                     INFO - Capture killed. Traffic size: 3110210 Bytes /home/docker/tbcrawl/results/230314_094714/0_0_0/capture.pcap
+2023-03-14 09:48:43,057 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:48:43,062 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:48:52,410 -                     INFO - *** Visit #0 to banana ***
+2023-03-14 09:48:58,657 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/0_1_0/capture.pcap
+2023-03-14 09:48:58,809 -                     DEBUG - capture started in 0.09999999999999964 seconds
+Exception!
+out_png size->112310
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:49:11,393 -                     INFO - Capture killed. Traffic size: 3389167 Bytes /home/docker/tbcrawl/results/230314_094714/0_1_0/capture.pcap
+2023-03-14 09:49:16,582 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:49:16,582 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:49:23,153 -                     INFO - *** Visit #0 to kiwi ***
+2023-03-14 09:49:28,062 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/0_2_0/capture.pcap
+2023-03-14 09:49:28,187 -                     DEBUG - capture started in 0.09999999999999964 seconds
+out_png size->337562
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:49:57,191 -                     INFO - Capture killed. Traffic size: 4343603 Bytes /home/docker/tbcrawl/results/230314_094714/0_2_0/capture.pcap
+2023-03-14 09:50:02,956 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:50:02,956 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:50:09,897 -                     INFO - *** Visit #0 to mango ***
+2023-03-14 09:50:16,545 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/0_3_0/capture.pcap
+2023-03-14 09:50:16,649 -                     DEBUG - capture started in 0.09999999999999964 seconds
+out_png size->279169
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:50:48,989 -                     INFO - Capture killed. Traffic size: 4494359 Bytes /home/docker/tbcrawl/results/230314_094714/0_3_0/capture.pcap
+2023-03-14 09:50:54,600 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:50:54,601 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:51:06,530 -                     INFO - **** Starting batch 1 ***
+2023-03-14 09:51:06,530 -                     WARNING - *** Tor process killing ***
+Killing tor process
+2023-03-14 09:51:06,543 -                     WARNING - Tor process killing succeeded
+Tor config: {'maxcircuitdirtiness': '600000', 'useentryguards': '0', 'controlport': '9051', 'socksport': '9050', 'socksbindaddress': '127.0.0.1'}
+Mar 14 09:51:06.679 [notice] Tor 0.4.4.6 (git-2a8b789ea6f308d0) running on Linux with Libevent 2.1.11-stable, OpenSSL 1.1.1i, Zlib 1.2.11, Liblzma N/A, and Libzstd N/A.
+Mar 14 09:51:06.679 [notice] Tor can't help you if you use it wrong! Learn how to be safe at https://www.torproject.org/download/download#warning
+Mar 14 09:51:06.710 [warn] Skipping obsolete configuration option "SocksListenAddress".
+Mar 14 09:51:06.711 [warn] ControlPort is open, but no authentication method has been configured.  This means that any program on your computer can reconfigure your Tor.  That's bad!  You should upgrade your Tor controller as soon as possible.
+Mar 14 09:51:06.718 [notice] Opening Socks listener on 127.0.0.1:9050
+Mar 14 09:51:06.718 [notice] Opened Socks listener on 127.0.0.1:9050
+Mar 14 09:51:06.718 [notice] Opening Control listener on 127.0.0.1:9051
+Mar 14 09:51:06.718 [notice] Opened Control listener on 127.0.0.1:9051
+Mar 14 09:51:06.000 [warn] You are running Tor as root. You don't need to, and you probably shouldn't.
+Mar 14 09:51:06.000 [notice] Bootstrapped 0% (starting): Starting
+Mar 14 09:51:06.000 [notice] Starting with guard context "default"
+Mar 14 09:51:07.000 [notice] Bootstrapped 5% (conn): Connecting to a relay
+Mar 14 09:51:09.000 [notice] Bootstrapped 10% (conn_done): Connected to a relay
+Mar 14 09:51:09.000 [notice] Bootstrapped 14% (handshake): Handshaking with a relay
+Mar 14 09:51:10.000 [notice] Bootstrapped 15% (handshake_done): Handshake with a relay done
+Mar 14 09:51:10.000 [notice] Bootstrapped 20% (onehop_create): Establishing an encrypted directory connection
+Mar 14 09:51:10.000 [notice] Bootstrapped 25% (requesting_status): Asking for networkstatus consensus
+Mar 14 09:51:10.000 [notice] Bootstrapped 30% (loading_status): Loading networkstatus consensus
+Mar 14 09:51:17.000 [notice] I learned some more directory information, but not enough to build a circuit: We have no usable consensus.
+Mar 14 09:51:17.000 [notice] Bootstrapped 40% (loading_keys): Loading authority key certs
+Mar 14 09:51:17.000 [notice] The current consensus has no exit nodes. Tor can only build internal paths, such as paths to onion services.
+Mar 14 09:51:17.000 [notice] Bootstrapped 45% (requesting_descriptors): Asking for relay descriptors
+Mar 14 09:51:17.000 [notice] I learned some more directory information, but not enough to build a circuit: We need more microdescriptors: we have 0/6497, and can only build 0% of likely paths. (We have 0% of guards bw, 0% of midpoint bw, and 0% of end bw (no exits in consensus, using mid) = 0% of path bw.)
+Mar 14 09:51:18.000 [notice] Bootstrapped 50% (loading_descriptors): Loading relay descriptors
+Mar 14 09:51:19.000 [notice] The current consensus contains exit nodes. Tor can build exit and internal paths.
+Mar 14 09:51:21.000 [notice] Bootstrapped 56% (loading_descriptors): Loading relay descriptors
+Mar 14 09:51:21.000 [notice] Bootstrapped 63% (loading_descriptors): Loading relay descriptors
+Mar 14 09:51:22.000 [notice] Bootstrapped 73% (loading_descriptors): Loading relay descriptors
+Mar 14 09:51:22.000 [notice] Bootstrapped 75% (enough_dirinfo): Loaded enough directory info to build circuits
+Mar 14 09:51:22.000 [notice] Bootstrapped 80% (ap_conn): Connecting to a relay to build circuits
+Mar 14 09:51:23.000 [notice] Bootstrapped 85% (ap_conn_done): Connected to a relay to build circuits
+Mar 14 09:51:23.000 [notice] Bootstrapped 89% (ap_handshake): Finishing handshake with a relay to build circuits
+Mar 14 09:51:24.000 [notice] Bootstrapped 90% (ap_handshake_done): Handshake finished with a relay to build circuits
+Mar 14 09:51:24.000 [notice] Bootstrapped 95% (circuit_create): Establishing a Tor circuit
+Mar 14 09:51:25.000 [notice] Bootstrapped 100% (done): Done
+2023-03-14 09:51:25,471 -                     INFO - *** Visit #0 to apple ***
+2023-03-14 09:51:31,567 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/1_0_1/capture.pcap
+2023-03-14 09:51:31,704 -                     DEBUG - capture started in 0.09999999999999964 seconds
+out_png size->310597
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:52:00,179 -                     INFO - Capture killed. Traffic size: 3506286 Bytes /home/docker/tbcrawl/results/230314_094714/1_0_1/capture.pcap
+2023-03-14 09:52:05,388 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:52:05,390 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:52:12,135 -                     INFO - *** Visit #0 to banana ***
+2023-03-14 09:52:17,061 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/1_1_1/capture.pcap
+2023-03-14 09:52:17,166 -                     DEBUG - capture started in 0.09999999999999964 seconds
+out_png size->324552
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:52:45,831 -                     INFO - Capture killed. Traffic size: 3535524 Bytes /home/docker/tbcrawl/results/230314_094714/1_1_1/capture.pcap
+2023-03-14 09:52:50,839 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:52:50,841 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:52:57,651 -                     INFO - *** Visit #0 to kiwi ***
+2023-03-14 09:53:02,962 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/1_2_1/capture.pcap
+2023-03-14 09:53:03,067 -                     DEBUG - capture started in 0.09999999999999964 seconds
+out_png size->332953
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:53:30,501 -                     INFO - Capture killed. Traffic size: 4239526 Bytes /home/docker/tbcrawl/results/230314_094714/1_2_1/capture.pcap
+2023-03-14 09:53:35,824 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:53:35,825 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:53:42,969 -                     INFO - *** Visit #0 to mango ***
+2023-03-14 09:53:49,404 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/1_3_1/capture.pcap
+2023-03-14 09:53:49,533 -                     DEBUG - capture started in 0.09999999999999964 seconds
+out_png size->1001259
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:54:21,100 -                     INFO - Capture killed. Traffic size: 5370816 Bytes /home/docker/tbcrawl/results/230314_094714/1_3_1/capture.pcap
+2023-03-14 09:54:26,587 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:54:26,587 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:54:38,875 -                     INFO - **** Starting batch 2 ***
+2023-03-14 09:54:38,877 -                     WARNING - *** Tor process killing ***
+Killing tor process
+2023-03-14 09:54:38,918 -                     WARNING - Tor process killing succeeded
+Tor config: {'maxcircuitdirtiness': '600000', 'useentryguards': '0', 'controlport': '9051', 'socksport': '9050', 'socksbindaddress': '127.0.0.1'}
+Mar 14 09:54:38.951 [notice] Tor 0.4.4.6 (git-2a8b789ea6f308d0) running on Linux with Libevent 2.1.11-stable, OpenSSL 1.1.1i, Zlib 1.2.11, Liblzma N/A, and Libzstd N/A.
+Mar 14 09:54:38.951 [notice] Tor can't help you if you use it wrong! Learn how to be safe at https://www.torproject.org/download/download#warning
+Mar 14 09:54:38.954 [warn] Skipping obsolete configuration option "SocksListenAddress".
+Mar 14 09:54:38.955 [warn] ControlPort is open, but no authentication method has been configured.  This means that any program on your computer can reconfigure your Tor.  That's bad!  You should upgrade your Tor controller as soon as possible.
+Mar 14 09:54:38.957 [notice] Opening Socks listener on 127.0.0.1:9050
+Mar 14 09:54:38.966 [notice] Opened Socks listener on 127.0.0.1:9050
+Mar 14 09:54:38.968 [notice] Opening Control listener on 127.0.0.1:9051
+Mar 14 09:54:38.978 [notice] Opened Control listener on 127.0.0.1:9051
+Mar 14 09:54:38.000 [warn] You are running Tor as root. You don't need to, and you probably shouldn't.
+Mar 14 09:54:39.000 [notice] Bootstrapped 0% (starting): Starting
+Mar 14 09:54:39.000 [notice] Starting with guard context "default"
+Mar 14 09:54:39.000 [notice] Bootstrapped 5% (conn): Connecting to a relay
+Mar 14 09:54:39.000 [notice] Bootstrapped 10% (conn_done): Connected to a relay
+Mar 14 09:54:40.000 [notice] Bootstrapped 14% (handshake): Handshaking with a relay
+Mar 14 09:54:40.000 [notice] Bootstrapped 15% (handshake_done): Handshake with a relay done
+Mar 14 09:54:40.000 [notice] Bootstrapped 75% (enough_dirinfo): Loaded enough directory info to build circuits
+Mar 14 09:54:40.000 [notice] Bootstrapped 85% (ap_conn_done): Connected to a relay to build circuits
+Mar 14 09:54:41.000 [notice] Bootstrapped 89% (ap_handshake): Finishing handshake with a relay to build circuits
+Mar 14 09:54:41.000 [notice] Bootstrapped 90% (ap_handshake_done): Handshake finished with a relay to build circuits
+Mar 14 09:54:41.000 [notice] Bootstrapped 95% (circuit_create): Establishing a Tor circuit
+Mar 14 09:54:43.000 [notice] Bootstrapped 100% (done): Done
+2023-03-14 09:54:43,798 -                     INFO - *** Visit #0 to apple ***
+2023-03-14 09:54:49,314 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/2_0_2/capture.pcap
+2023-03-14 09:54:49,417 -                     DEBUG - capture started in 0.09999999999999964 seconds
+Exception!
+out_png size->94111
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:55:13,955 -                     INFO - Capture killed. Traffic size: 1842940 Bytes /home/docker/tbcrawl/results/230314_094714/2_0_2/capture.pcap
+2023-03-14 09:55:19,140 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:55:19,140 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:55:24,943 -                     INFO - *** Visit #0 to banana ***
+2023-03-14 09:55:30,893 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/2_1_2/capture.pcap
+2023-03-14 09:55:30,999 -                     DEBUG - capture started in 0.09999999999999964 seconds
+out_png size->335052
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:56:01,832 -                     INFO - Capture killed. Traffic size: 4339152 Bytes /home/docker/tbcrawl/results/230314_094714/2_1_2/capture.pcap
+2023-03-14 09:56:07,196 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:56:07,197 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:56:14,041 -                     INFO - *** Visit #0 to kiwi ***
+2023-03-14 09:56:19,719 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/2_2_2/capture.pcap
+2023-03-14 09:56:19,827 -                     DEBUG - capture started in 0.09999999999999964 seconds
+Exception!
+out_png size->90537
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:56:33,820 -                     INFO - Capture killed. Traffic size: 2365571 Bytes /home/docker/tbcrawl/results/230314_094714/2_2_2/capture.pcap
+2023-03-14 09:56:39,116 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:56:39,117 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:56:45,266 -                     INFO - *** Visit #0 to mango ***
+2023-03-14 09:56:50,943 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/2_3_2/capture.pcap
+2023-03-14 09:56:51,066 -                     DEBUG - capture started in 0.09999999999999964 seconds
+out_png size->324785
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:57:19,100 -                     INFO - Capture killed. Traffic size: 4233382 Bytes /home/docker/tbcrawl/results/230314_094714/2_3_2/capture.pcap
+2023-03-14 09:57:24,411 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:57:24,413 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:57:36,892 -                     INFO - **** Starting batch 3 ***
+2023-03-14 09:57:36,892 -                     WARNING - *** Tor process killing ***
+Killing tor process
+2023-03-14 09:57:36,897 -                     WARNING - Tor process killing succeeded
+Tor config: {'maxcircuitdirtiness': '600000', 'useentryguards': '0', 'controlport': '9051', 'socksport': '9050', 'socksbindaddress': '127.0.0.1'}
+Mar 14 09:57:36.903 [notice] Tor 0.4.4.6 (git-2a8b789ea6f308d0) running on Linux with Libevent 2.1.11-stable, OpenSSL 1.1.1i, Zlib 1.2.11, Liblzma N/A, and Libzstd N/A.
+Mar 14 09:57:36.904 [notice] Tor can't help you if you use it wrong! Learn how to be safe at https://www.torproject.org/download/download#warning
+Mar 14 09:57:36.905 [warn] Skipping obsolete configuration option "SocksListenAddress".
+Mar 14 09:57:36.905 [warn] ControlPort is open, but no authentication method has been configured.  This means that any program on your computer can reconfigure your Tor.  That's bad!  You should upgrade your Tor controller as soon as possible.
+Mar 14 09:57:36.906 [notice] Opening Socks listener on 127.0.0.1:9050
+Mar 14 09:57:36.906 [notice] Opened Socks listener on 127.0.0.1:9050
+Mar 14 09:57:36.906 [notice] Opening Control listener on 127.0.0.1:9051
+Mar 14 09:57:36.906 [notice] Opened Control listener on 127.0.0.1:9051
+Mar 14 09:57:36.000 [warn] You are running Tor as root. You don't need to, and you probably shouldn't.
+Mar 14 09:57:36.000 [notice] Bootstrapped 0% (starting): Starting
+Mar 14 09:57:37.000 [notice] Starting with guard context "default"
+Mar 14 09:57:37.000 [notice] Bootstrapped 5% (conn): Connecting to a relay
+Mar 14 09:57:37.000 [notice] Bootstrapped 10% (conn_done): Connected to a relay
+Mar 14 09:57:37.000 [notice] Bootstrapped 14% (handshake): Handshaking with a relay
+Mar 14 09:57:38.000 [notice] Bootstrapped 15% (handshake_done): Handshake with a relay done
+Mar 14 09:57:38.000 [notice] Bootstrapped 75% (enough_dirinfo): Loaded enough directory info to build circuits
+Mar 14 09:57:41.000 [notice] Bootstrapped 89% (ap_handshake): Finishing handshake with a relay to build circuits
+Mar 14 09:57:41.000 [notice] Bootstrapped 90% (ap_handshake_done): Handshake finished with a relay to build circuits
+Mar 14 09:57:41.000 [notice] Bootstrapped 95% (circuit_create): Establishing a Tor circuit
+Mar 14 09:57:42.000 [notice] Bootstrapped 100% (done): Done
+2023-03-14 09:57:43,014 -                     INFO - *** Visit #0 to apple ***
+2023-03-14 09:57:49,752 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/3_0_3/capture.pcap
+2023-03-14 09:57:49,859 -                     DEBUG - capture started in 0.09999999999999964 seconds
+Exception!
+out_png size->91538
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:58:11,431 -                     INFO - Capture killed. Traffic size: 2964732 Bytes /home/docker/tbcrawl/results/230314_094714/3_0_3/capture.pcap
+2023-03-14 09:58:18,463 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:58:18,465 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:58:26,388 -                     INFO - *** Visit #0 to banana ***
+2023-03-14 09:58:34,664 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/3_1_3/capture.pcap
+2023-03-14 09:58:34,771 -                     DEBUG - capture started in 0.09999999999999964 seconds
+Exception!
+out_png size->92665
+Running as user "root" and group "root". This could be dangerous.
+tshark: The file "/home/docker/tbcrawl/results/230314_094714/3_1_3/capture.pcap" appears to have been cut short in the middle of a packet.
+2023-03-14 09:58:52,109 -                     ERROR - Unknown exception: Command '['tshark', '-r', '/home/docker/tbcrawl/results/230314_094714/3_1_3/capture.pcap', '-T', 'fields', '-e', 'frame.time_relative', '-e', 'tcp.len', '-E', 'header=n', '-E', 'separator=\t', '-E', 'occurrence=f']' returned non-zero exit status 2.
+2023-03-14 09:58:52,164 -                     INFO - Capture killed. Traffic size: 2926493 Bytes /home/docker/tbcrawl/results/230314_094714/3_1_3/capture.pcap
+2023-03-14 09:58:58,168 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:58:58,168 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:59:04,951 -                     INFO - *** Visit #0 to kiwi ***
+2023-03-14 09:59:10,923 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/3_2_3/capture.pcap
+2023-03-14 09:59:11,035 -                     DEBUG - capture started in 0.09999999999999964 seconds
+Exception!
+out_png size->93092
+Running as user "root" and group "root". This could be dangerous.
+2023-03-14 09:59:25,425 -                     INFO - Capture killed. Traffic size: 3943879 Bytes /home/docker/tbcrawl/results/230314_094714/3_2_3/capture.pcap
+2023-03-14 09:59:31,423 -                     DEBUG - Found 3165 guards in the consensus.
+2023-03-14 09:59:31,423 -                     INFO - Filtering packets without a guard IP.
+2023-03-14 09:59:38,912 -                     INFO - *** Visit #0 to mango ***
+2023-03-14 09:59:47,166 -                     INFO - LD_LIBRARY_PATH="" dumpcap -P -a duration:180 -a filesize:120000 -i enp0s3 -s 0 -f 'tcp and not host 127.0.0.1 and not tcp port 22 and not tcp port 20' -w /home/docker/tbcrawl/results/230314_094714/3_3_3/capture.pcap
+2023-03-14 09:59:47,270 -                     DEBUG - capture started in 0.09999999999999964 seconds
+c^C2023-03-14 10:00:01,203 -                     INFO - Capture killed. Traffic size: 4085969 Bytes /home/docker/tbcrawl/results/230314_094714/3_3_3/capture.pcap
+2023-03-14 10:00:01,205 -                     WARNING - Keyboard interrupt! Quitting...
+make: *** [Makefile:38: run] Error 255
